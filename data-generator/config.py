@@ -5,11 +5,11 @@ load_dotenv()
 
 # Конфигурация подключения к БД
 DB_CONFIG = {
-    'host': os.getenv('DB_HOST', 'postgres'),
-    'port': os.getenv('DB_PORT', '5432'),
-    'database': os.getenv('DB_NAME', 'game_currency'),
-    'user': os.getenv('DB_USER', 'admin'),
-    'password': os.getenv('DB_PASSWORD', '12345')
+    'host': os.getenv('POSTGRES_HOST', 'postgres'),
+    'port': os.getenv('POSTGRES_PORT', '5432'),
+    'database': os.getenv('POSTGRES_DB', 'game_currency'),
+    'user': os.getenv('POSTGRES_USER', 'admin'),
+    'password': os.getenv('POSTGRES_PASSWORD', '12345')
 }
 
 # Конфигурация генератора данных

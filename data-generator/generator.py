@@ -67,7 +67,7 @@ class CurrencyTransactionGenerator:
     # Подключение к БД
     def connect_to_db(self):
         max_retries = 10
-        for i in range(max_retries):
+        for _ in range(max_retries):
             try:
                 self.conn = psycopg2.connect(**DB_CONFIG)
                 return True
