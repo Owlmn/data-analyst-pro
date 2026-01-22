@@ -31,6 +31,10 @@ class CurrencyTransactionGenerator:
         self.current_player_index = (self.current_player_index + 1) % len(self.player_uids)
         return uid
     
+    # Получение случайного player_uid
+    def _get_random_player_uid(self):
+        return random.choice(self.player_uids)
+    
     # Генерация суммы транзакции с учетом вероятности
     def _generate_transaction_amount(self, currency_name):
         
@@ -119,7 +123,21 @@ class CurrencyTransactionGenerator:
         
         self.insert_transaction(transaction)
         
+    # Генерация и вставка нескольких транзакций для одного игрока
+    def generate_and_insert_multiple_transactions(self, num_transactions=5):
+        player_uid = self._get_next_player_uid()
+        for _ in range(num_transactions):
+            transaction = self._generate_transaction(player_uid)
+            self.insert_transaction(transaction)
     
+    # Генерация и вставка случайного количества транзакций для случайного игрока
+    def generate_and_insert_random_transactions(self):
+        num_transactions = random.randint(1, 50)
+        for _ in range(num_transactions):
+            player_uid = self._get_random_player_uid()
+            transaction = self._generate_transaction(player_uid)
+            self.insert_transaction(transaction)
+
     def run(self):
         
         if not self.connect_to_db():
@@ -130,7 +148,8 @@ class CurrencyTransactionGenerator:
                 
         try:
             while True:
-                self.generate_and_insert_transaction()
+                # Генерация случайного количества транзакций для случайных игроков
+                self.generate_and_insert_random_transactions()
                 time.sleep(GENERATOR_CONFIG.get('sleep_interval', 0.5))
                 
         except KeyboardInterrupt:
