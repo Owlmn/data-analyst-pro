@@ -40,7 +40,7 @@ services:
       redis:
         condition: service_started
     environment:
-      REDASH_DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+      REDASH_DATABASE_URL: "postgresql://${REDASH_USER}:${REDASH_PASSWORD}@postgres:5432/${REDASH_DB_NAME}"
       REDASH_REDIS_URL: "redis://redis:6379/0"
     ports:
       - "5000:5000"
@@ -57,7 +57,7 @@ services:
       redis:
         condition: service_started
     environment:
-      REDASH_DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+      REDASH_DATABASE_URL: "postgresql://${REDASH_USER}:${REDASH_PASSWORD}@postgres:5432/${REDASH_DB_NAME}"
       REDASH_REDIS_URL: "redis://redis:6379/0"
     networks:
       - analytics_net
