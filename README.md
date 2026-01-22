@@ -9,7 +9,7 @@ ___
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/Y-uri-K/Data-analysis.git
+   git clone https://github.com/Owlmn/data-analyst-pro.git
    ```
 
 
