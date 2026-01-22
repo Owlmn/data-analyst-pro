@@ -2,7 +2,7 @@
 ___
 
 ## Описание проекта
-Проект включает PostgreSQL базу данных, сервер Redis, дашборд Redash для визуализации данных и кастомный генератор данных.
+Система описывает внутриигровые логи пользователей связанные с тратой/получением трех типов валюты: credits - стандартная внутригровая валюта, gems - премиальная валюта, crystals - донатная валюта. Также имеются данные о платформе, с которой было совершено действие. Проект включает PostgreSQL базу данных, сервер Redis, дашборд Redash для визуализации данных и кастомный генератор данных.
 
 ## Установка
 Для установки проекта выполните следующие шаги:
@@ -14,23 +14,18 @@ ___
 
 
 2. Создайте файл `.env` в корневой директории на основе примера и заполните необходимые переменные окружения:
-   ```env
-   POSTGRES_DB=your_database_name
-   POSTGRES_USER=your_username
-   POSTGRES_PASSWORD=your_password
-   POSTGRES_HOST=postgres
-   POSTGRES_PORT=5432
+   ```
+    POSTGRES_DB=
+    POSTGRES_USER=
+    POSTGRES_PASSWORD=
+    POSTGRES_HOST=
+    POSTGRES_PORT=
 
-   REDASH_SECRET_KEY=your_redash_secret_key
-   REDASH_COOKIE_SECRET=your_redash_cookie_secret
-   REDASH_DATABASE_URL=postgresql://your_username:your_password@postgres:5432/your_database_name
-   REDASH_REDIS_URL=redis://redis:6379/0
+    REDASH_USER=
+    REDASH_PASSWORD=
+    REDASH_DB_NAME=
    ```
 
-   Для генерации `REDASH_SECRET_KEY` и `REDASH_COOKIE_SECRET` используйте следующую команду:
-   ```bash
-   python -c "import secrets; print(secrets.token_hex(32))"
-   ```
 
 ## Запуск проекта
 
@@ -39,11 +34,25 @@ ___
    docker compose run --rm redash-server create_db
    ```
 
-2. Запуск:
+2. Команда запуска:
    ```bash
    docker compose up -d
    ```
 
 3. Доступ к сервисам:
    - **Дашборд Redash**: [http://localhost:5000](http://localhost:5000)
+
+# Проект
+## Схема БД 
+
+![Image alt](https://github.com/Owlmn/data-analyst-pro/raw/main/screenshots/db_schema.png)
+
+## Redash Dashboard
+
+![Image alt](https://github.com/Owlmn/data-analyst-pro/raw/main/screenshots/capture_20260122202053779.png)
+
+## Список контейнеров
+
+![Image alt](https://github.com/Owlmn/data-analyst-pro/raw/main/screenshots/containers.png)
+
 
