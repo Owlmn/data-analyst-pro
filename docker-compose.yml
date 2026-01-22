@@ -1,0 +1,74 @@
+version: '3.8'
+
+networks:
+  analytics_net:
+    driver: bridge
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-db:/docker-entrypoint-initdb.d:ro
+    networks:
+      - analytics_net
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  data-generator:
+    build: ./data-generator
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - analytics_net
+    restart: unless-stopped
+
+  redash:
+    image: redash/redash:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      REDASH_DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+      REDASH_REDIS_URL: "redis://redis:6379/0"
+      REDASH_SECRET_KEY: "my-secret-key-change-me"
+      REDASH_COOKIE_SECRET: "my-cookie-secret-change-me"
+      REDASH_WEB_WORKERS: 1
+      PYTHONUNBUFFERED: 0
+    ports:
+      - "5000:5000"
+    networks:
+      - analytics_net
+    restart: unless-stopped
+  
+  redis:
+    image: redis:7-alpine
+    networks:
+      - analytics_net
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
